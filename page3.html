@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Ticket Details</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #ffffff;
+    color: rgb(0, 0, 0);
+}
+
+.container {
+    padding: 40px;
+}
+
+.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.sidebar {
+    width: 150px;
+    background: #1c305b;
+    padding: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+
+    z-index: 1000;
+}
+.container {
+    margin-left: 250px;
+    padding: 40px;
+}
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+.ticket-info h1 {
+    margin: 0;
+    font-size: 40px;
+}
+
+.ticket-id {
+    opacity: 0.6;
+    margin-top: 5px;
+}
+
+
+.user {
+    margin-top: 30px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-name {
+    font-size: 36px;
+    font-weight: bold;
+}
+
+.user-email {
+    opacity: 0.7;
+}
+
+.desc {
+    margin-top: 40px;
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 30px;
+    padding: 40px;
+    font-size: 28px;
+    text-align: center;
+}
+
+.btn {
+    margin-top: 30px;
+}
+
+button {
+    background: transparent;
+    border: 2px solid rgb(0, 0, 0);
+    color: white;
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 10px;
+    
+}
+
+button {
+    background: rgb(204, 217, 235);
+    color: black;
+}
+.reply-box {
+    margin-top: 30px;
+    border: 3px solid rgb(249, 249, 249);
+    border-radius: 30px;
+    padding: 25px;
+
+}
+.reply-box textarea {
+    width: 100%;
+    height: 120px;
+    background: white;      
+    border: 1px solid rgb(0, 0, 0);
+    outline: none;
+    color: black;          
+    font-size: 18px;
+    resize: none;
+    padding: 10px;
+}
+
+.reply-box button {
+    margin-top: 15px;
+    border: 2px solid white;
+    background: transparent;
+    color: rgb(252, 253, 255);
+    padding: 8px 18px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.reply-box button:hover {
+    background: white;
+    color: #000001;
+}
+.status-box {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: #314e79;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+.top {
+    position: relative;
+}
+.sidebar h2 {
+    margin-bottom: 30px;
+    color: rgb(222, 221, 221);
+    text-align: left;
+
+}
+.client-data {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.client-data p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: rgb(231, 231, 231);
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<div class="sidebar">
+
+    <h2>Client Info</h2>
+
+    <div class="client-data">
+        <p><b>Name:</b> Leila Riley</p>
+        <p><b>Email:</b> leilariley@gmail.com</p>
+        <p><b>Country:</b> Albania</p>
+        <p><b>Phone:</b> +355 69 123 4567</p>
+        <p><b>Address:</b> Metrotech Center, Brooklyn, NY 11201, USA</p>
+    </div>
+
+</div>
+
+    <div class="top">
+        <div class="ticket-info">
+            <h1 id="problemTitle">Problem</h1>
+            <div class="ticket-id" id="ticketId">#000000</div>
+        </div>
+        <div class="avatar"></div>
+    </div>
+
+    <div class="user">
+        <div class="user-name" id="clientName">Client Name</div>
+        <div class="user-email" id="clientEmail">email@gmail.com</div>
+    </div>
+
+    <div class="desc" id="description">
+       Description
+    </div>
+
+    <div class="btn">
+        <button onclick="toggleReply()">Reply</button>
+    </div>
+<div class="reply-box" id="replyBox" style="display:none;">
+    <textarea id="replyText" placeholder="Write your reply to customer..."></textarea>
+    <button onclick="sendReply()">Send</button>
+</div>
+<div class="status-box" id="ticketStatus">In Handling</div>
+</div>
+
+<script>
+let tickets = JSON.parse(localStorage.getItem("allTickets")) || [];
+let id = localStorage.getItem("selectedTicket");
+
+let ticket = tickets.find(t => t.id == id);
+
+if (ticket) {
+    document.getElementById("problemTitle").innerText = ticket.problem;
+    document.getElementById("ticketId").innerText = "#" + ticket.id;
+    document.getElementById("clientName").innerText = ticket.klient;
+
+    let email = ticket.klient.toLowerCase().replace(" ", ".") + "@gmail.com";
+    document.getElementById("clientEmail").innerText = email;
+
+    document.getElementById("description").innerText = ticket.problem;
+}
+function toggleReply() {
+    let box = document.getElementById("replyBox");
+
+    if (box.style.display === "none") {
+        box.style.display = "block";
+    } else {
+        box.style.display = "none";
+    }
+}
+
+function sendReply() {
+    let text = document.getElementById("replyText").value;
+
+    if (text.trim() === "") {
+        alert("Write something first!");
+        return;
+    }
+
+    alert("Reply sent to client ✅");
+
+    document.getElementById("replyText").value = "";
+}
+document.getElementById("ticketStatus").innerText = "Status: " + (ticket.status || "Open");
+if (ticket) {
+
+    if (!ticket.status || ticket.status === "Open") {
+        ticket.status = "In Handling";
+
+        localStorage.setItem("allTickets", JSON.stringify(tickets));
+    }
+
+    document.getElementById("ticketStatus").innerText = ticket.status;
+}
+document.getElementById("ticketStatus").innerText =
+    ticket.status || "In Handling";
+</script>
+
+</body>
+</html>

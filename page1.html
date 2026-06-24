@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="UTF-8">
+<title>Helpdesk Login</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+    url('videoframe.png') no-repeat center center/cover;
+
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-box {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 40px;
+    border-radius: 15px;
+    width: 320px;
+    color: white;
+}
+input, button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    border: none;
+}
+
+button {
+    width: auto;
+    padding: 10px 25px;
+    background: #085368;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    border-radius: 25px;
+
+    display: block;
+    margin: 15px auto 0 auto;
+}
+
+button:hover {
+    background: #009ec3;
+}
+h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: white;
+}
+#error {
+    text-align: center;
+    margin-top: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="login-box">
+    <h2>WELCOME</h2>
+
+    <form id="loginForm">
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button type="submit">SUBMIT</button>
+    </form>
+
+    <p id="error"></p>
+</div>
+
+<script>
+document.getElementById("loginForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    let user = document.getElementById("username").value.trim();
+    let pass = document.getElementById("password").value.trim();
+    let error = document.getElementById("error");
+
+    let emailPattern = /^[a-z]+\.[a-z]+@gmail\.com$/;
+    let passPattern = /^[0-9]{8}$/;
+
+    if (!emailPattern.test(user)) {
+        error.style.color = "red";
+        error.innerText = "Invalid Username";
+        return;
+    }
+
+    if (!passPattern.test(pass)) {
+        error.style.color = "red";
+        error.innerText = "Invalid Password";
+        return;
+    }
+
+    error.style.color = "lightgreen";
+    error.innerText = "LogIn Successful!";
+
+    setTimeout(() => {
+        window.location.href = "page2.html";
+    }, 800);
+});
+</script>
+
+</body>
+</html>
